@@ -1,7 +1,20 @@
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../app/app.module';
+import { AppModule } from '../app.module';
 import request from 'supertest';
+
+const createMock = jest.fn();
+jest.mock('@prisma/client', () => {
+  return {
+    PrismaClient: jest.fn().mockImplementation(() => {
+      return {
+        user: {
+          create: createMock,
+        },
+      };
+    }),
+  };
+});
 
 describe('General API', () => {
   let app: INestApplication;
@@ -29,9 +42,17 @@ describe('General API', () => {
   });
 
   describe('GET /', () => {
-    it('should return 200', async () => {
-      const response = await request(server).get('/api');
-      expect(response.status).toBe(200);
+    const userMock = {
+      id: 1,
+      name: 'John Doe',
+      email: 'john.doe@test.com',
+    };
+    it('should return 201', async () => {
+      createMock.mockResolvedValue(userMock);
+      const response = await request(server).post('/api/users')
+        .send(userMock);
+      expect(response.status).toBe(201);
+      expect(response.body).toMatchSnapshot();
     });
   });
 

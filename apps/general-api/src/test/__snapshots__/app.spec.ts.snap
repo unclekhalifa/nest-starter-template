@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`General API GET / should return 201 1`] = `
+{
+  "email": "john.doe@test.com",
+  "id": 1,
+  "name": "John Doe",
+}
+`;

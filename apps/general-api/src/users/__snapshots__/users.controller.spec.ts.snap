@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UsersController create should call create on the users service 1`] = `
+{
+  "email": "john.doe@test.com",
+  "name": "John Doe",
+}
+`;
