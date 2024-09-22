@@ -1,6 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 
+import * as bcrypt from 'bcrypt';
+
 const prisma = new PrismaClient();
+
+const ROUNDS_OF_HASHING = 10;
 
 (async () => {
   try {
@@ -9,17 +13,23 @@ const prisma = new PrismaClient();
     await prisma.post.deleteMany({});
 
     // Seed the database with some data
+    const passwordAlice = await bcrypt.hash('alice_password', ROUNDS_OF_HASHING);
     const alice = await prisma.user.create({
       data: {
         email: 'alice@prisma.io',
-        name: 'Alice'
+        password: passwordAlice,
+        name: 'Alice',
+        role: 'admin'
       }
     });
 
+    const passwordBob = await bcrypt.hash('bob_password', ROUNDS_OF_HASHING);
     const bob = await prisma.user.create({
       data: {
         email: 'bob@prisma.io',
-        name: 'Bob'
+        password: passwordBob,
+        name: 'Bob',
+        role: 'user'
       }
     });
 

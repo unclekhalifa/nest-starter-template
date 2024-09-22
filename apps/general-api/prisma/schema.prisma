@@ -8,11 +8,18 @@ generator client {
   binaryTargets = ["native", "linux-arm64-openssl-1.1.x"]
 }
 
+enum Role {
+  user
+  admin
+}
+
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  role     Role    @default(user)
+  password String  @db.VarChar(255)
+  name     String?
+  posts    Post[]
 }
 
 model Post {
